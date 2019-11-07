@@ -11,12 +11,12 @@ void setup() {
 void loop(){ 
    // Make servo go to 0 degrees 
    Servo1.write(0); 
-   delay(600); 
+   delay(400); 
 //   // Make servo go to 90 degrees 
 //   Servo1.write(60); 
 //   delay(1000); 
 //   Servo1.write(90); 
 //   delay(1000); 
    Servo1.write(180); 
-   delay(600); 
+   delay(400); 
 }
