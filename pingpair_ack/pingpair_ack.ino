@@ -25,23 +25,12 @@ RF24 radio(2,3);
 // Topology
 const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Radio pipe addresses for the 2 nodes to communicate.
 
-// Role management: Set up role.  This sketch uses the same software for all the nodes
-// in this system.  Doing so greatly simplifies testing.  
-
-typedef enum { role_ping_out = 1, role_pong_back } role_e;                 // The various roles supported by this sketch
-const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};  // The debug-friendly names of those roles
-role_e role = role_pong_back;                                              // The role of the current running sketch
-
-// A single byte to keep track of the data being sent back and forth
 byte counter = 1;
 
 void setup(){
 
   Serial.begin(115200);
   printf_begin();
-  Serial.print(F("\n\rRF24/examples/pingpair_ack/\n\rROLE: "));
-  Serial.println(role_friendly_name[role]);
-  Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
 
   // Setup and configure rf radio
 
