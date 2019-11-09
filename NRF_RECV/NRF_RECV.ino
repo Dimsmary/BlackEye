@@ -22,9 +22,8 @@ void setup() {
   myServo.attach(5);
   myServo1.attach(9);
   radio.begin();
-  radio.openWritingPipe(addresses[0]); // 00001
+//  radio.openWritingPipe(addresses[0]); // 00001
   radio.openReadingPipe(1, addresses[1]); // 00002
-  radio.setPALevel(RF24_PA_MIN);
   Serial.begin(9600);
 }
 void loop() {
@@ -32,17 +31,17 @@ void loop() {
   radio.startListening();
   if ( radio.available()) {
       long angleV = 0;
-      radio.read(&angleV, sizeof(angleV));
+      radio.read( &angleV, sizeof(angleV) );
       int order = angleV >> 8;
       if(order == 1){
         myServo.write(angleV - 256);
+        radio.stopListening();
+        long sendd = 1;
+        radio.write(&sendd, sizeof(sendd) );
       }
-      else{
-        myServo1.write(angleV - 257);
+      else if(order == 2){
+        myServo1.write(angleV - 512);
       }
+
   }
-    delay(5);
-    radio.stopListening();
-    buttonState = digitalRead(button);
-    radio.write(&buttonState, sizeof(buttonState));
 }
