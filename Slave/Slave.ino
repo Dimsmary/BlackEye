@@ -56,4 +56,8 @@ void loop(void) {
     radio.writeAckPayload(pipeNo,&gotdata, sizeof(gotdata) );
     myServo1.write(gotdata - 512);
    }
+   // 以上为舵机控制命令
+   else if(order == 3){
+    radio.writeAckPayload(pipeNo,&gotdata, sizeof(gotdata) );
+   }
 }

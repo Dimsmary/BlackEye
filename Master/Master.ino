@@ -8,8 +8,13 @@
 const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL }; 
 // 定义了传输地址
 
+unsigned char key_sta[2] = {0, 0};
 RF24 radio(2,3);
 // 设置NRF接口，使用默认SPI端口，2-CE / 3-CSN
+
+byte state = LOW;
+byte state1 = LOW;
+
 void setup(){
   Serial.begin(115200);
   // 启用串口
@@ -29,7 +34,11 @@ void setup(){
 
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
+  pinMode(12, OUTPUT);
   // 初始化电位器读取
+
+//  attachInterrupt(digitalPinToInterrupt(0), switch1, FALLING);
+//  attachInterrupt(digitalPinToInterrupt(7), switch2, LOW);
 }
 
 long SendData(long data){
@@ -61,4 +70,27 @@ void loop(){
 //  radio.write(&angleValueY, sizeof(angleValueY)); 
   SendData(angleValueX);
   SendData(angleValueY);
+
+  if(digitalRead(0)){
+    digitalWrite(12, HIGH);
+  }
+  else{
+    digitalWrite(12, LOW);
+  }
+//  if (key_sta[0]){
+//    if (key_sta[1]){
+//       SendData(768);
+//    }
+//    else{
+//      SendData(1024);
+//    }
+//    key_sta[0] = 0;
+//  }
+  // 按键中断检测
+}
+
+void switch1(){
+      delayMicroseconds(5000);
+      state = !state;
+      digitalWrite(12, state);
 }
