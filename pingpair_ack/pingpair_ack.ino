@@ -8,7 +8,6 @@ RF24 radio(2,3);
 
 // Topology
 const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Radio pipe addresses for the 2 nodes to communicate.
-
 void setup(){
 
   Serial.begin(115200);
@@ -20,18 +19,15 @@ void setup(){
   radio.setAutoAck(1);                    // Ensure autoACK is enabled
   radio.enableAckPayload();               // Allow optional ack payloads
   radio.setRetries(0,15);                 // Smallest time between retries, max no. of retries
-  radio.setPayloadSize(1);                // Here we are sending 1-byte payloads to test the call-response speed
-  radio.startListening();                 // Start listening
+  radio.setPayloadSize(4);                // Here we are sending 1-byte payloads to test the call-response speed
   radio.openWritingPipe(pipes[0]);
-//  radio.openReadingPipe(1,pipes[1]);
 }
 
 
-void SendData(byte data) {
+void SendData(long data) {
     radio.stopListening();                                  // First, stop listening so we can talk.
-    byte gotByte;  
-    
-    if (!radio.write( &data, 1 )){
+    long gotByte;  
+    if (!radio.write( &data, sizeof(data) )){
         Serial.println(F("failed."));      
     }else{
 
@@ -39,7 +35,7 @@ void SendData(byte data) {
         Serial.println(F("Blank Payload Received.")); 
       }else{
         while(radio.available() ){
-          radio.read( &gotByte, 1 );
+          radio.read( &gotByte, sizeof(gotByte) );
           printf("Got response %d\n",gotByte);
         }
       }
@@ -47,7 +43,7 @@ void SendData(byte data) {
     }
 }
 void loop(void) {
-    byte i = 7;
+    long i = 256;
     SendData(i);
     delay(1000);
 }

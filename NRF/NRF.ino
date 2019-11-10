@@ -35,21 +35,22 @@ void loop() {
 
   
   radio.write(&angleValue, sizeof(angleValue)); //识别码添加
-  Serial.println(angleValue);
-  radio.startListening();
-  unsigned long started_waiting_at = millis();
-  bool timeout = false;
-  while (!timeout)
-      if (millis() - started_waiting_at > 200 )
-        timeout = true;
-      radio.read(&recv, sizeof(recv));
-      if(recv == 1){
-        timeout = false;
-      }
-
-        
-  if(!timeout){
-      // Spew it
-      Serial.println("GOT");
-  }
+  radio.write(&angleValue1, sizeof(angleValue1)); //识别码添加
+//  Serial.println(angleValue);
+//  radio.startListening();
+//  unsigned long started_waiting_at = millis();
+//  bool timeout = false;
+//  while (!timeout)
+//      if (millis() - started_waiting_at > 200 )
+//        timeout = true;
+//      radio.read(&recv, sizeof(recv));
+//      if(recv == 1){
+//        timeout = false;
+//      }
+//
+//        
+//  if(!timeout){
+//      // Spew it
+//      Serial.println("GOT");
+//  }
 }

@@ -35,9 +35,9 @@ void loop() {
       int order = angleV >> 8;
       if(order == 1){
         myServo.write(angleV - 256);
-        radio.stopListening();
-        long sendd = 1;
-        radio.write(&sendd, sizeof(sendd) );
+//        radio.stopListening();
+//        long sendd = 1;
+//        radio.write(&sendd, sizeof(sendd) );
       }
       else if(order == 2){
         myServo1.write(angleV - 512);
