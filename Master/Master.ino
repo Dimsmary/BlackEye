@@ -71,15 +71,19 @@ long SendData(long data){
   //定义
   if (!radio.write(&data, sizeof(data))){
       return 0;
+      Serial.println("Not Sent.");
       // 未发送成功      
   }else{
     if(!radio.available()){ 
       return 0; 
+      Serial.println("Empty.");
       // 发送成功但ack为空
     }else{
       while(radio.available() ){
         radio.read( &gotdata, sizeof(gotdata));
       }
+      Serial.println("Success Get ack.");
+      Serial.println(gotdata);
       return gotdata;
     }
   }

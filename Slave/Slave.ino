@@ -13,7 +13,7 @@ Servo myServo0;
 Servo myServo1;
 // 定义舵机对象
 
-RF24 radio(2,3);
+
 // 设置NRF接口，使用默认SPI端口，2-CE / 3-CSN
 
 const int control1 = 7;
@@ -36,14 +36,22 @@ long eye_sta[] = {0, 0, 0, 0};
 long servoANG[] = {900, 900};
 // 舵机角度
 
+const int servo0 = 5;
+const int servo1 = 10;
+// 舵机端口
+
+const int ctr1 = 8;
+// 控制脚
+
+RF24 radio(4,9);
 void setup(){
   Serial.begin(115200);
   // 启用串口
   printf_begin();
   // 启用printf 
 
-  myServo0.attach(5);
-  myServo1.attach(9);
+  myServo0.attach(servo0);
+  myServo1.attach(servo1);
   // 绑定舵机输出口
   
   radio.begin();
@@ -59,7 +67,10 @@ void setup(){
 
   pinMode(control1, OUTPUT);
   pinMode(control2, OUTPUT);
+  pinMode(ctr1, OUTPUT);
   pinMode(A0, INPUT);
+  digitalWrite(ctr1, HIGH);
+  // 开启舵机电源
 }
 
 void loop(void) {
@@ -71,7 +82,7 @@ void loop(void) {
    }
    int order = gotdata >> 8;
    // 识别码
-   
+   Serial.println(order);
    if(order == 1){
     radio.writeAckPayload(pipeNo,&command1, sizeof(gotdata) );
       if (servoANG[0] < 1800){
