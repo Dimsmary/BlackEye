@@ -9,8 +9,14 @@ const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };
 // 定义了传输地址
 
 unsigned char key_sta[2] = {0, 0};
-RF24 radio(2,3);
-// 设置NRF接口，使用默认SPI端口，2-CE / 3-CSN
+RF24 radio(4,5);
+// 设置NRF接口，使用默认SPI端口，4-CE / 5-CSN
+
+const int buttonPin1 = 0;
+const int buttonPin2 = 1;
+const int buttonPin3 = 2;
+const int buttonPin4 = 7;
+// 按钮中断脚
 
 byte button1_STA = LOW;
 int buttonState1 = 0;
@@ -19,14 +25,15 @@ int lastButtonState1 = 1;
 byte button2_STA = LOW;
 int buttonState2 = 0;
 int lastButtonState2 = 1;
+
+byte button3_STA = LOW;
+int buttonState3 = 0;
+int lastButtonState3 = 1;
+
+byte button4_STA = LOW;
+int buttonState4 = 0;
+int lastButtonState4 = 1;
 // 按钮中断变量
-
-
-const int  buttonPin1 = 0;   
-const int  buttonPin2 = 7;       
-// 中断输入脚
-
-
 
 const long command1 = 256;
 const long command2 = 512;
@@ -35,6 +42,7 @@ const long command4 = 1024;
 const long command5 = 1280;
 const long command6 = 1536;
 const long command7 = 1792;
+const long command8 = 2048;
 // 命令列表
 
 void setup(){
@@ -57,12 +65,17 @@ void setup(){
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
 // 初始化电位器读取
+
   pinMode(buttonPin1, INPUT_PULLUP);
   pinMode(buttonPin2, INPUT_PULLUP);
+  pinMode(buttonPin3, INPUT_PULLUP);
+  pinMode(buttonPin4, INPUT_PULLUP);
 // 初始化按钮中断输入
 
-  attachInterrupt(digitalPinToInterrupt(0), switch1, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(7), switch2, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(buttonPin1), switch1, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(buttonPin2), switch2, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(buttonPin3), switch3, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(buttonPin4), switch4, CHANGE);
 // 配置中断
 }
 
@@ -116,11 +129,19 @@ void loop(){
   // 按键中断检测
   if (buttonState1 == HIGH){
     buttonState1 = LOW;
-    Serial.println(SendData(command5));
+    SendData(command5);
   }
   if (buttonState2 == HIGH){
     buttonState2 = LOW;
     SendData(command6);
+  }
+  if (buttonState3 == HIGH){
+    buttonState2 = LOW;
+    SendData(command7);
+  }
+  if (buttonState4 == HIGH){
+    buttonState2 = LOW;
+    SendData(command8);
   }
   // 按键中断处理
 }
@@ -159,5 +180,37 @@ void switch2(){
     delay(50);
   }
   lastButtonState2 = buttonState2;
+  // 原理同Switch1
+}
+
+void switch3(){
+  buttonState3 = digitalRead(buttonPin3);
+  if (buttonState3 != lastButtonState3) {
+    if (buttonState3 == HIGH) { 
+      Serial.println("off");
+    } else {
+      button3_STA = HIGH;
+      // 标志位
+      Serial.println("on");
+    }
+    delay(50);
+  }
+  lastButtonState3 = buttonState3;
+  // 原理同Switch1
+}
+
+void switch4(){
+  buttonState4 = digitalRead(buttonPin4);
+  if (buttonState4 != lastButtonState4) {
+    if (buttonState4 == HIGH) { 
+      Serial.println("off");
+    } else {
+      button4_STA = HIGH;
+      // 标志位
+      Serial.println("on");
+    }
+    delay(50);
+  }
+  lastButtonState4 = buttonState4;
   // 原理同Switch1
 }

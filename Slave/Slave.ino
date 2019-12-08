@@ -16,8 +16,8 @@ Servo myServo1;
 
 // 设置NRF接口，使用默认SPI端口，2-CE / 3-CSN
 
-const int control1 = 7;
-const int control2 = 8;
+const int control1 = 8;
+const int control2 = 13;
 // MOS输出控制脚
 
 const long command1 = 256;
@@ -27,6 +27,7 @@ const long command4 = 1024;
 const long command5 = 1280;
 const long command6 = 1536;
 const long command7 = 1792;
+const long command8 = 2048;
 
 // 命令列表
 
@@ -39,9 +40,6 @@ long servoANG[] = {900, 900};
 const int servo0 = 5;
 const int servo1 = 10;
 // 舵机端口
-
-const int ctr1 = 8;
-// 控制脚
 
 RF24 radio(4,9);
 void setup(){
@@ -67,9 +65,8 @@ void setup(){
 
   pinMode(control1, OUTPUT);
   pinMode(control2, OUTPUT);
-  pinMode(ctr1, OUTPUT);
   pinMode(A0, INPUT);
-  digitalWrite(ctr1, HIGH);
+//  digitalWrite(ctr1, HIGH);
   // 开启舵机电源
 }
 
